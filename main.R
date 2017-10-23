@@ -13,13 +13,29 @@
 library(shiny)
 
 ui <- navbarPage("Analyze Function Option",
-                tabPanel("FreqDomainDemo"
-                ),
-                tabPanel("Coherence Calculate"
-                ),
-                navbarMenu("Spectum Order",
-                           tabPanel("Phase")
-                )
+                 navbarMenu("Frequency Domain Transfrom",
+                           tabPanel("Spectrum Raw Data",
+                                    fileInput("org_data_in",h3("Time serial Data:")),
+                                    downloadButton("store_fft_raw_data","Download")
+                           ),
+                           tabPanel("Amlitude Data"
+                           ),
+                           tabPanel("Phase Data"
+                           )
+                 ),
+                 navbarMenu("Coherence Analysis",
+                           tabPanel("Single Frequency"),
+                           tabPanel("Multi Frequency")
+                           
+                 ),
+                 navbarMenu("Iverse Freq to Time Domain",
+                           tabPanel("Single Data")
+                           
+                 ),
+                 navbarMenu("Help",
+                          tabPanel("About"
+                          )
+                 )
 
 )
 
