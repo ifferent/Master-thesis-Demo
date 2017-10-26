@@ -8,7 +8,7 @@
 # Date: 2017.10.19                                                          #
 # Final Version: 0.1                                                        #
 #############################################################################
-
+#############################################################################
 
 library(shiny)
 
@@ -19,6 +19,7 @@ ui <- navbarPage("Analyze Function Option",
                                     downloadButton("store_fft_raw_data","Download")
                            ),
                            tabPanel("Amlitude Data"
+                                    
                            ),
                            tabPanel("Phase Data"
                            )
@@ -41,6 +42,10 @@ ui <- navbarPage("Analyze Function Option",
 
 
 server <- function(input, output, session) {
+   
+  observeEvent(input$org_data_in,{
+  
+  })
 
 }
 
