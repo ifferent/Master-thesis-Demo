@@ -1,12 +1,11 @@
-gen.fft_data<-function(path.source, path.target, period)
+gen.fft_data<-function(path.source)#, path.target, period)
 {
-  if((grepl(".csv",path.source)||grepl(".CSV",path.source))==FALSE)
-    return("檔案格式非CSV檔")
-  if((period!="month")&&(period!="season")&&(period!="year"))
-    return("週期輸入錯誤")
-  
-  time_serial.period<-period
-  raw<-read.csv(path.source,header=TRUE)
+  if((grepl(".csv",path.source$name)||grepl(".CSV",path.source$name))==FALSE)
+      return("non csv file")
+  #if((period!="month")&&(period!="season")&&(period!="year"))
+  #time_serial.period<-period
+
+  raw<-read.csv(path.source$datapath,header=TRUE)
   table.size<-dim(raw)
   time_serial.fft<-matrix(rep(0,table.size[1]*(table.size[2]-1)),ncol=(table.size[2]-1))
   
@@ -15,5 +14,5 @@ gen.fft_data<-function(path.source, path.target, period)
     time_serial.fft[ ,(i-1)]<-fft(raw[ ,i])
   }
   
-  save(time_serial.fft,time_serial.period,file=path.target)
+  return(time_serial.fft)
 } 
