@@ -57,23 +57,23 @@ server <- function(input, output, session) {
       if (is.null(input$org_data_in))
           return(NULL)
      
-     fft.raw_data<-gen.fft_data(input$org_data_in)
+     fft.raw_data<<-gen.fft_data(input$org_data_in)
      
      output$debug<-renderPrint({
          fft.raw_data
      })
      
    })
-   if (is.null(input$org_data_in) != TRUE)
-   {
       output$store_fft_raw_data<-downloadHandler(
-         filename = input$org_data_in$name, 
+        filename = function() {
+          paste(input$org_data_in$name, ".RData")
+        }, 
          content = function(file){
-           save(fft.raw_data, file)
+           if(is.null(fft.raw_data))
+             return(NULL)
+           save(fft.raw_data, file=file)
          }
       )
-   }
-  
 }
 
 shinyApp(ui=ui, server = server)
