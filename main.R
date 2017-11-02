@@ -19,19 +19,26 @@ ui <- navbarPage("Analyze Function Option",
                        sidebarLayout(
                           sidebarPanel(
                              fileInput("org_data_in",h3("Time serial Data:")),
-                             downloadButton("store_fft_raw_data","Download"),
-                             verbatimTextOutput("debug")
+                             downloadButton("store_fft_raw_data","Download")
+                             #,verbatimTextOutput("debug")
                           ),
                           mainPanel(
                                
                           )
                        )
                     ),
-                           tabPanel("Amlitude Data"
-                                    
-                           ),
-                           tabPanel("Phase Data"
-                           )
+                    tabPanel("Amlitude Data",
+                       sidebarLayout(
+                          sidebarPanel(
+                             verbatimTextOutput("debug")
+                          ),
+                          mainPanel(
+                                 
+                          )     
+                       )
+                    ),
+                    tabPanel("Phase Data"
+                    )
                  ),
                  navbarMenu("Coherence Analysis",
                            tabPanel("Single Frequency"),
@@ -60,7 +67,7 @@ server <- function(input, output, session) {
      fft.raw_data<<-gen.fft_data(input$org_data_in)
      
      output$debug<-renderPrint({
-         fft.raw_data
+         #fft.raw_data
      })
      
    })
