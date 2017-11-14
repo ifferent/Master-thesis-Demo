@@ -12,6 +12,7 @@
 
 library(shiny)
 source('function/gen_fft_data.R')
+source('function/amp_fft_data.R')
 
 ui <- navbarPage("Analyze Function Option",
                  navbarMenu("Frequency Domain Transfrom",
@@ -30,6 +31,8 @@ ui <- navbarPage("Analyze Function Option",
                     tabPanel("Amlitude Data",
                        sidebarLayout(
                           sidebarPanel(
+                             fileInput("raw_data",h3("Frequency Domain Data:")),
+                             #downloadButton("store_fft_raw_data","Download"),
                              verbatimTextOutput("debug")
                           ),
                           mainPanel(
@@ -64,14 +67,21 @@ server <- function(input, output, session) {
       if (is.null(input$org_data_in))
           return(NULL)
      
-     fft.raw_data<<-gen.fft_data(input$org_data_in)
-     
-     output$debug<-renderPrint({
-         #fft.raw_data
-     })
+      fft.raw_data<<-gen.fft_data(input$org_data_in)
      
    })
-      output$store_fft_raw_data<-downloadHandler(
+  
+   observeEvent(input$raw_data,{
+      if (is.null(input$raw_data))
+          return(NULL)
+      fft.amp_data<<-amp.fft_data(input$raw_data)
+      output$debug<-renderPrint({
+         #fft.raw_data
+         fft.amp_data
+      })
+    
+   })
+   output$store_fft_raw_data<-downloadHandler(
         filename = function() {
           paste(input$org_data_in$name, ".RData")
         }, 
