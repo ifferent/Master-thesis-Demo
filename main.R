@@ -105,7 +105,6 @@ server <- function(input, output, session) {
      content = function(file){
        if(is.null(fft.amp_data))
          return(NULL)
-       save(fft.raw_data, file=file)
        write.csv(fft.amp_data, file, row.names = FALSE)
      }
    )
