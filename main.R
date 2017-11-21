@@ -11,6 +11,7 @@
 #############################################################################
 
 library(shiny)
+library(ggplot2)
 source('function/gen_fft_data.R')
 source('function/amp_fft_data.R')
 
@@ -32,7 +33,7 @@ ui <- navbarPage("Analyze Function Option",
                        sidebarLayout(
                           sidebarPanel(
                              fileInput("raw_data",h3("Frequency Domain Data:")),
-                             #downloadButton("store_fft_raw_data","Download"),
+                             downloadButton("store_fft_amp_data","Download"),
                              verbatimTextOutput("debug")
                           ),
                           mainPanel(
@@ -62,6 +63,7 @@ ui <- navbarPage("Analyze Function Option",
 
 server <- function(input, output, session) {
    
+   #creat the fft raw data
    observeEvent(input$org_data_in,{
     
       if (is.null(input$org_data_in))
@@ -71,6 +73,7 @@ server <- function(input, output, session) {
      
    })
   
+   #calculate the fft amplitude data  
    observeEvent(input$raw_data,{
       if (is.null(input$raw_data))
           return(NULL)
@@ -81,9 +84,11 @@ server <- function(input, output, session) {
       })
     
    })
+   
+   #download the fft raw data file
    output$store_fft_raw_data<-downloadHandler(
         filename = function() {
-          paste(input$org_data_in$name, ".RData")
+          paste(input$org_data_in$name, ".RData",sep = "")
         }, 
          content = function(file){
            if(is.null(fft.raw_data))
@@ -91,6 +96,20 @@ server <- function(input, output, session) {
            save(fft.raw_data, file=file)
          }
       )
+
+   #download the fft amplitude data file   
+   output$store_fft_amp_data<-downloadHandler(
+     filename = function() {
+       paste(input$raw_data$name, ".csv", sep = "")
+     }, 
+     content = function(file){
+       if(is.null(fft.amp_data))
+         return(NULL)
+       save(fft.raw_data, file=file)
+       write.csv(fft.amp_data, file, row.names = FALSE)
+     }
+   )
+   
 }
 
 shinyApp(ui=ui, server = server)
